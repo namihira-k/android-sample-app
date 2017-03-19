@@ -94,4 +94,6 @@
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="login">Login</string>
+
 </resources>

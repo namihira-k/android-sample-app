@@ -1,4 +1,25 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+Properties props = new Properties()
+try {
+    props.load(file('security.properties').newDataInputStream())
+} catch (Exception ex) {
+    throw new GradleException("can not load *.properties");
+}
 
 android {
     compileSdkVersion 25
@@ -10,9 +31,18 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [fabricApiKey: "${props.getProperty("fabric.api.key")}"];
     }
     buildTypes {
+        debug {
+            buildConfigField "String", "TWITTER_API_KEY", "\"${props.getProperty("twitter.api.key")}\""
+            buildConfigField "String", "TWITTER_API_SECRET", "\"${props.getProperty("twitter.api.secret")}\""
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
+            buildConfigField "String", "TWITTER_API_KEY", "\"${props.getProperty("twitter.api.key")}\""
+            buildConfigField "String", "TWITTER_API_SECRET", "\"${props.getProperty("twitter.api.secret")}\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -20,6 +50,7 @@ android {
     productFlavors {
     }
 }
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -29,4 +60,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
     testCompile 'junit:junit:4.12'
+    compile('com.twitter.sdk.android:twitter:2.3.2@aar') {
+        transitive = true;
+    }
 }
