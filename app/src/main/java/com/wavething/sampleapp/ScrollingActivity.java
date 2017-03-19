@@ -3,7 +3,9 @@ package com.wavething.sampleapp;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ClipData;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,14 +14,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.app.AlertDialog;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.*;
+
+import io.fabric.sdk.android.Fabric;
 
 public class ScrollingActivity extends AppCompatActivity {
+
+    private static final String TWITTER_API_KEY = BuildConfig.TWITTER_API_KEY;
+    private static final String TWITTER_API_SECRET = BuildConfig.TWITTER_API_SECRET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_API_KEY, TWITTER_API_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,6 +72,13 @@ public class ScrollingActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+
+        if (id == R.id.action_login) {
+            Intent intent = new Intent(getApplication(), LoginWithTwitterActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }
