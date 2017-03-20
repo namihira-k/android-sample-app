@@ -9,4 +9,12 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
 
+    <Button
+        android:id="@+id/twitter_logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/twitter_login_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/logout"/>
+
 </RelativeLayout>

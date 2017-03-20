@@ -95,6 +95,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="timeline">Timeline</string>
 
 </resources>

@@ -7,8 +7,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -21,6 +24,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 public class LoginWithTwitterActivity extends Activity {
 
     private TwitterLoginButton loginButton;
+    private Button logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,19 @@ public class LoginWithTwitterActivity extends Activity {
             @Override
             public void failure(TwitterException exception) {
                 Log.d("TwitterKit", "Login with Twitter failure", exception);
+            }
+        });
+
+        logoutButton = (Button) findViewById(R.id.twitter_logout_button);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TwitterSession twitterSession = Twitter.getInstance().core.getSessionManager().getActiveSession();
+                if (twitterSession != null) {
+                    Twitter.getSessionManager().clearActiveSession();
+                    Twitter.logOut();
+                    Toast.makeText(getApplicationContext(), "Logout!", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
