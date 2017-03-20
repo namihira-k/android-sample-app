@@ -15,6 +15,7 @@ import com.crashlytics.android.Crashlytics;
 import com.twitter.sdk.android.Twitter;
 
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+
 import io.fabric.sdk.android.Fabric;
 
 public class ScrollingActivity extends AppCompatActivity {
@@ -47,6 +48,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 postDialog.show(ft, "dialog");
             }
         });
+
     }
 
     @Override
@@ -70,6 +72,12 @@ public class ScrollingActivity extends AppCompatActivity {
 
         if (id == R.id.action_login) {
             Intent intent = new Intent(getApplication(), LoginWithTwitterActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.action_timeline) {
+            Intent intent = new Intent(getApplication(), TimelineActivity.class);
             startActivity(intent);
             return true;
         }
