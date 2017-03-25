@@ -1,34 +1,44 @@
+/*
+ * Copyright 2017 Kosuke Namihira All Rights Reserved.
+ */
 package com.wavething.sampleapp;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+
 import com.crashlytics.android.Crashlytics;
 import com.twitter.sdk.android.Twitter;
-
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
+import com.twitter.sdk.android.tweetui.UserTimeline;
 
 import io.fabric.sdk.android.Fabric;
 
-public class ScrollingActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     private static final String TWITTER_API_KEY = BuildConfig.TWITTER_API_KEY;
     private static final String TWITTER_API_SECRET = BuildConfig.TWITTER_API_SECRET;
 
+    private ListView timelineView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_API_KEY, TWITTER_API_SECRET);
         Fabric.with(this, new Twitter(authConfig), new Crashlytics());
-        setContentView(R.layout.activity_scrolling);
+
+        setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -36,19 +46,19 @@ public class ScrollingActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-                if (prev != null) {
-                    ft.remove(prev);
-                }
-                ft.addToBackStack(null);
-
-                // Create and show the dialog.
-                DialogFragment postDialog = new PostDialogFragment();
-                postDialog.show(ft, "dialog");
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
+        final TwitterSession twitterSession = Twitter.getInstance().core.getSessionManager().getActiveSession();
+        final String username = twitterSession != null ? twitterSession.getUserName() : "twitter";
+
+        final UserTimeline userTimeline = new UserTimeline.Builder().screenName(username).build();
+        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this).setTimeline(userTimeline).build();
+
+        timelineView = (ListView) findViewById(R.id.timeline);
+        timelineView.setAdapter(adapter);
     }
 
     @Override
@@ -76,12 +86,8 @@ public class ScrollingActivity extends AppCompatActivity {
             return true;
         }
 
-        if (id == R.id.action_timeline) {
-            Intent intent = new Intent(getApplication(), TimelineActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
+
+
 }

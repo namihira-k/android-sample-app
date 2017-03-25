@@ -14,10 +14,4 @@
         android:title="@string/login"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_timeline"
-        android:orderInCategory="100"
-        android:title="@string/timeline"
-        app:showAsAction="never" />
-
 </menu>
