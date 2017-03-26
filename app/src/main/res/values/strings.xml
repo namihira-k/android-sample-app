@@ -11,6 +11,13 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="timeline">Timeline</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="post">Post</string>
+
+    <string name="prompt_content">Content</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <string name="error">Error</string>
 
 </resources>
