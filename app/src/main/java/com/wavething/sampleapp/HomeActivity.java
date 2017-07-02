@@ -3,11 +3,9 @@
  */
 package com.wavething.sampleapp;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,9 +16,8 @@ import android.widget.ListView;
 import com.crashlytics.android.Crashlytics;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.tweetui.SearchTimeline;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
-import com.twitter.sdk.android.tweetui.UserTimeline;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -30,6 +27,9 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TWITTER_API_SECRET = BuildConfig.TWITTER_API_SECRET;
 
     private ListView timelineView;
+
+    private static final String USERNAME = "mine_3m";
+    private static final String HASH_TAG = "#twitter";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +51,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        final TwitterSession twitterSession = Twitter.getInstance().core.getSessionManager().getActiveSession();
-        final String username = twitterSession != null ? twitterSession.getUserName() : "twitter";
-
-        final UserTimeline userTimeline = new UserTimeline.Builder().screenName(username).build();
-        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this).setTimeline(userTimeline).build();
+        final SearchTimeline searchTimeline = buildSearchTimeline(USERNAME, HASH_TAG);
+        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter(this, searchTimeline);
 
         timelineView = (ListView) findViewById(R.id.timeline);
         timelineView.setAdapter(adapter);
@@ -89,5 +86,11 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private SearchTimeline buildSearchTimeline(final String username, final String hashTag) {
+        final String query = "from:" + username + " " + hashTag;
+        return new SearchTimeline.Builder()
+                                 .query(query)
+                                 .build();
+    }
 
 }

@@ -50,8 +50,13 @@ android {
     }
     productFlavors {
     }
-}
 
+    packagingOptions {
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/notice.txt'
+    }
+
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
